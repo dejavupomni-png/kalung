@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mockup E-Commerce & Pembayaran</title>
+    
+    <style>
+        /* Mengatur gaya dasar halaman */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f9;
+        }
+
+        /* Header / Navigasi */
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Kontainer Produk */
+        .container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            gap: 20px;
+            /* Mode Desktop: 4 Kolom */
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        /* Kartu Produk */
+        .product-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 180px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .product-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin: 12px 0 6px 0;
+            color: #333;
+        }
+
+        .product-price {
+            color: #e44d26;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /* Tombol Beli */
+        .btn-beli {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 1em;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+
+        .btn-beli:hover {
+            background-color: #218838;
+        }
+
+        /* ==========================================
+           STYLING HALAMAN / MODAL PEMBAYARAN (CHECKOUT)
+           ========================================== */
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none; /* Disembunyikan secara default */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        .checkout-box {
+            background-color: white;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .btn-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #888;
+        }
+
+        .checkout-header {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .order-summary {
+            background-color: #eef5ff;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .order-summary p {
+            margin: 5px 0;
+            font-size: 0.95em;
+        }
+
+        /* Formulir Checkout */
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            color: #444;
+        }
+
+        .form-group input, 
+        .form-group select, 
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 0.95em;
+        }
+
+        .btn-bayar {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 1.1em;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .btn-bayar:hover {
+            background-color: #0056b3;
+        }
+
+        /* ==========================================
+           PENGATURAN LAYAR RESPONSIF
+           ========================================== */
+        
+        /* Mode Tablet (Maksimal lebar 900px) */
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Mode Handphone (Maksimal lebar 600px) */
+        @media (max-width: 600px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 10px;
+            }
+
+            .checkout-box {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🛒 Toko Online Serba Ada</h1>
+        <p>Pilih barang favoritmu dan lakukan checkout dengan mudah!</p>
+    </header>
+
+    <div class="container">
+        
+        <div class="product-card">
+            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80" alt="Sepatu Keren">
+            <div class="product-title">Sepatu Sneakers Merah</div>
+            <div class="product-price">Rp 450.000</div>
+            <button class="btn-beli" onclick="bukaCheckout('Sepatu Sneakers Merah', 'Rp 450.000')">Beli / Checkout</button>
+        </div>
+
+        <div class="product-card">
+            <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80" alt="Headphone">
+            <div class="product-title">Headphone Bluetooth</div>
+            <div class="product-price">Rp 850.000</div>
+            <button class="btn-beli" onclick="bukaCheckout('Headphone Bluetooth', 'Rp 850.000')">Beli / Checkout</button>
+        </div>
+
+        <div class="product-card">
+            <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80" alt="Jam Tangan">
+            <div class="product-title">Jam Tangan Minimalis</div>
+            <div class="product-price">Rp 320.000</div>
+            <button class="btn-beli" onclick="bukaCheckout('Jam Tangan Minimalis', 'Rp 320.000')">Beli / Checkout</button>
+        </div>
+
+        <div class="product-card">
+            <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400&q=80" alt="Kamera Polaroid">
+            <div class="product-title">Kamera Polaroid</div>
+            <div class="product-price">Rp 1.200.000</div>
+            <button class="btn-beli" onclick="bukaCheckout('Kamera Polaroid', 'Rp 1.200.000')">Beli / Checkout</button>
+        </div>
+
+    </div>
+
+    <div class="modal-overlay" id="checkoutModal">
+        <div class="checkout-box">
+            <button class="btn-close" onclick="tutupCheckout()">&times;</button>
+            
+            <div class="checkout-header">
+                <h2 style="margin: 0; color: #333;">💳 Pembayaran</h2>
+            </div>
+
+            <div class="order-summary">
+                <p><strong>Item:</strong> <span id="namaBarang">-</span></p>
+                <p><strong>Total Harga:</strong> <span id="hargaBarang" style="color: #e44d26; font-weight: bold;">-</span></p>
+            </div>
+
+            <form onsubmit="prosesPembayaran(event)">
+                <div class="form-group">
+                    <label for="nama">Nama Lengkap</label>
+                    <input type="text" id="nama" placeholder="Contoh: Budi Santoso" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="telepon">Nomor WhatsApp / Telepon</label>
+                    <input type="tel" id="telepon" placeholder="08123456789" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="alamat">Alamat Pengiriman</label>
+                    <textarea id="alamat" rows="3" placeholder="Masukkan alamat lengkap..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="metode">Metode Pembayaran</label>
+                    <select id="metode" required>
+                        <option value="">-- Pilih Metode Pembayaran --</option>
+                        <option value="Transfer Bank">Transfer Bank (BCA / Mandiri / BNI)</option>
+                        <option value="E-Wallet">E-Wallet (GoPay / OVO / DANA / ShopeePay)</option>
+                        <option value="QRIS">QRIS (Scan All Payment)</option>
+                        <option value="COD">Bayar di Tempat (COD)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-bayar">Konfirmasi & Bayar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi untuk membuka halaman pembayaran
+        function bukaCheckout(nama, harga) {
+            document.getElementById('namaBarang').innerText = nama;
+            document.getElementById('hargaBarang').innerText = harga;
+            document.getElementById('checkoutModal').style.display = 'flex';
+        }
+
+        // Fungsi untuk menutup halaman pembayaran
+        function tutupCheckout() {
+            document.getElementById('checkoutModal').style.display = 'none';
+        }
+
+        // Fungsi untuk memproses pembayaran saat tombol diklik
+        function prosesPembayaran(event) {
+            event.preventDefault(); // Mencegah reload halaman
+            
+            const nama = document.getElementById('nama').value;
+            const barang = document.getElementById('namaBarang').innerText;
+            const harga = document.getElementById('hargaBarang').innerText;
+            const metode = document.getElementById('metode').value;
+
+            // Menampilkan notifikasi sukses
+            alert(
+                "🎉 PEMBAYARAN BERHASIL!\n\n" +
+                "Terima kasih " + nama + ",\n" +
+                "Pesanan " + barang + " (" + harga + ") menggunakan " + metode + " telah diterima dan sedang diproses."
+            );
+
+            // Tutup modal dan reset formulir
+            tutupCheckout();
+            event.target.reset();
+        }
+    </script>
+
+</body>
+</html>
