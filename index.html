@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -131,7 +131,6 @@
             position: relative;
         }
 
-        /* Aksen Border Batik Halus di Samping Sidebar */
         .sidebar::after {
             content: "";
             position: absolute;
@@ -176,7 +175,6 @@
             gap: 12px;
         }
 
-        /* Ornamen Batik Kecil di Judul */
         .header-title::before {
             content: "☁️";
             font-size: 0.8em;
@@ -450,19 +448,28 @@
         }
 
         // ==========================================
-        // 2. DATA TRANSAKSI & INISIALISASI (TERHUBUNG KE INDEX.HTML)
+        // 2. DATA TRANSAKSI & PRODUK (SINKRON DENGAN USER)
         // ==========================================
         let dataTransaksi = JSON.parse(localStorage.getItem('kingShopOrders')) || [];
         
         if (dataTransaksi.length === 0) {
             dataTransaksi = [
-                { id: "KS-1092", tanggal: "2026-08-01", produk: "Kemeja Batik Megamendung (Hitam) x1", total: 450000 },
+                { id: "KS-1092", tanggal: "2026-08-01", produk: "Sepatu Sneaker Pro (Hitam) x1", total: 450000 },
                 { id: "KS-1093", tanggal: "2026-08-02", produk: "Tas BackPack Premium (Putih) x2", total: 500000 }
             ];
             localStorage.setItem('kingShopOrders', JSON.stringify(dataTransaksi));
         }
 
+        // Sinkronisasi produk awal agar sama persis dengan yang ada di index.html
         let daftarProduk = JSON.parse(localStorage.getItem('kingShopProducts')) || [];
+        if (daftarProduk.length === 0) {
+            daftarProduk = [
+                { id: 1, nama: "Sepatu Sneaker Pro", kategori: "Sepatu", harga: 450000, stok: 10, gambar: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400" },
+                { id: 2, nama: "Tas BackPack Premium", kategori: "Tas", harga: 250000, stok: 5, gambar: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400" }
+            ];
+            localStorage.setItem('kingShopProducts', JSON.stringify(daftarProduk));
+        }
+
         let revenueChart = null; 
 
         function initData() {
